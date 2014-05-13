@@ -1,17 +1,39 @@
 <?php 
 
+/**
+ * dataprocessor
+ * Processes a text file into csv file
+ * @package Shopping Test
+ * @author Olanipekun Olufemi <iolufemi@ymail.com>
+ * @copyright 2014
+ * @version v0.1
+ * @access public
+ */
 class dataprocessor{
   
   //Set datafile variable
   private $datafile;
     
     //initialize class and pass datafile path
+    /**
+     * dataprocessor::__construct()
+     * Initializes the class
+     * @param string $datafile
+     * @return void
+     */
     function __construct($datafile = "../data/datafile"){
         $this->datafile = $datafile;
         //check if the file exists
         if(file_exists($this->datafile)){
             //proccess the data in the file if file exists
-            $this->processdata();
+            $process = $this->processdata();
+            if(!$process){
+                //Failed for some weird reason                
+                echo 'Failed';
+            }else{
+                echo 'Success';
+                            
+            }
         }else{
             //show message if file does not exist
             echo 'The file does not exist';
@@ -19,6 +41,11 @@ class dataprocessor{
         
     }
     
+    /**
+     * dataprocessor::processdata()
+     * Process the datafile
+     * @return array
+     */
     private function processdata(){
         //open the datafile in read only form
         $file = fopen($this->datafile,'r');
@@ -126,11 +153,12 @@ class dataprocessor{
         foreach($rdata as $value){
             fputcsv($newfile,$value);
             }
+        //Close all opened files
         fclose($newdatafile);
         fclose($newfile);
         fclose($file);
         
-        
+        return $rdata;
     }
     
     
